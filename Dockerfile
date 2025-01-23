@@ -21,7 +21,6 @@ RUN apt-get update \
       libqt5widgets5 \
       libuuid1 \
       zlib1g \
-      unzip \
       gedit \
   && rm -rf /var/lib/apt/lists/*
 
@@ -29,8 +28,7 @@ RUN apt-get update \
 COPY --from=extractor /opt/Trace32_H7 /opt/Trace32_H7
 
 RUN chmod +x /opt/Trace32_H7/Trace32_H7_linux.sh \
-  && chmod +x /opt/Trace32_H7/TRACE32/bin/pc_linux64/udev.conf/setup_udevrules.sh \
-  && unzip /opt/Trace32_H7/TRACE32/help.zip -d /opt/Trace32_H7/TRACE32/
+  && chmod +x /opt/Trace32_H7/TRACE32/bin/pc_linux64/udev.conf/setup_udevrules.sh
 
 
 # Intercom
