@@ -1,1 +1,2 @@
 Trace32_H7/TRACE32/help.t32 -text
+Trace32_H7/TRACE32/demo/source/Arduino15/staging/packages/*.zip filter=lfs diff=lfs merge=lfs -text
