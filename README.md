@@ -7,7 +7,7 @@ please make commande :
 
 setx MNTWSL "/mnt/c/your path/docker_trace32h7"
 
-run .\connect_lauterbach.bat
+run .\docker_windows.bat
 
 Avant de stoper le docker, quitter Trace32 pour reprendre la main sur la sonde
 
