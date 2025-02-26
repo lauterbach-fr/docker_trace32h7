@@ -1,0 +1,52 @@
+; @Title: Script to find given string on terminal
+; @Description:
+;   This script reads a string from a window, it looks for a string given
+;   as a parameter when the script is launched
+;     do termfind.cmm <com> <baud> <string>
+; @Author: LBA
+; @Keywords: serial terminal
+; @Copyright: (C) 1989-2014 Lauterbach GmbH, licensed for use with TRACE32(R) only
+; $Id: termfind.cmm 19422 2022-05-30 17:19:12Z rweiss $
+
+LOCAL &comport
+LOCAL &speed
+LOCAL &string
+LOCAL &count
+
+ENTRY &comport &speed &string
+
+IF "&comport"==""
+  &comport="COM1"
+
+IF "&speed"==""
+  &speed="115200."
+
+IF "&string"==""
+  &string="my_string"
+
+PRINT "port=&comport, bps=&speed"
+PRINT "looking for [&string]... "
+
+WinPOS 4. 4. 80. 25. 0. 0. term
+TERM.RESet
+TERM.METHOD COM &comport &speed 8 NONE 1STOP NONE 
+TERM.SIZE 80 1000 ; define capacity of the TERM window
+TERM.SCROLL ON ; scrolling follows to the TERM cursor
+TERM.Mode VT100 ; or ASCII (default), STRING, HEX ...
+TERM.view ; open the TERM window
+WAIT 2.s
+TERM.Out " " 10.
+PRINT "Wait for [&string]..."
+&count=0
+RePeaT
+(
+  &count=&count+1
+  WAIT 1.s
+  SCREEN.display
+  WinFIND "&string" term
+  IF &count>10.
+    ENDDO
+)
+WHILE !FOUND()
+
+ENDDO

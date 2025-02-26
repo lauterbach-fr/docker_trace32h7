@@ -1,0 +1,27 @@
+[
+  {
+    "Sourcefile": null,
+    "Include": "",
+    "Includepath": "C:\\Users\\Lily-RoseTonolini\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\mbed_portenta\\4.2.1\\cores\\arduino"
+  },
+  {
+    "Sourcefile": null,
+    "Include": "",
+    "Includepath": "C:\\Users\\Lily-RoseTonolini\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\mbed_portenta\\4.2.1\\variants\\PORTENTA_H7_M7"
+  },
+  {
+    "Sourcefile": "C:\\Users\\Lily-RoseTonolini\\AppData\\Local\\arduino\\sketches\\5F45D398E28387D6450D738D841F91B7\\sketch\\MultipleBlinks.ino.cpp",
+    "Include": "Scheduler.h",
+    "Includepath": "C:\\Users\\Lily-RoseTonolini\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\mbed_portenta\\4.2.1\\libraries\\Scheduler\\src"
+  },
+  {
+    "Sourcefile": "C:\\Users\\Lily-RoseTonolini\\AppData\\Local\\arduino\\sketches\\5F45D398E28387D6450D738D841F91B7\\sketch\\MultipleBlinks.ino.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "C:\\Users\\Lily-RoseTonolini\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\mbed_portenta\\4.2.1\\libraries\\Scheduler\\src\\Scheduler.cpp",
+    "Include": "",
+    "Includepath": null
+  }
+]

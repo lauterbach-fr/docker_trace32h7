@@ -1,0 +1,204 @@
+; --------------------------------------------------------------------------------
+; @Title: Script to open a Terminal Window over Serial Port
+; @Description:
+;   Script to open a terminal window communicating via serial port of host computer.
+;   The script gets two parameters:
+;       - The com port (per default COM1)
+;       - The baudrate (per defualt 115200.)
+;   e.g.
+;       DO term.cmm COM3 115200.
+;       DO term.cmm /dev/ttyS0 38400. 
+;   
+; @Author: REI
+; @Copyright: (C) 1989-2024 Lauterbach GmbH, licensed for use with TRACE32(R) only
+; --------------------------------------------------------------------------------
+; $Id: term.cmm 23033 2024-07-08 07:57:21Z amerkle $
+
+
+  LOCAL &comport  &speed &data &parity &stop &flow &mode &scroll &size1 &size2
+
+  ENTRY &comport &speed
+
+  &data="8"
+  &parity="NONE"
+  &stop="1STOP"
+  &flow="NONE"
+  &size1=80.
+  &size2=1000.
+  &mode="VT100"
+  &scroll=TRUE()
+
+; if a command for creating a Terminal window exist we use it. In that case we assume that referring Waitterm command also exist.
+  IF Practice.Command.Available(T32TERM)
+  (
+    T32TERM
+    ENDDO	
+  )
+  ELSE
+  (
+    GLOBALON CMD WaitTerm DO ~~/demo/etc/terminal/tools/waitterm
+  )  
+	
+  IF "&comport"!=""&&"&speed"!=""
+    GOTO termwin
+;if no parameters given, use default by OS version, 115200 bps
+  IF "&comport"==""
+  (
+    IF (OS.NAME()=="Windows")
+      &comport="COM1"
+    ELSE IF (OS.NAME()=="Linux")
+      &comport="/dev/ttyS0"
+  )
+  
+  IF "&speed"==""
+    &speed="115200."
+
+  
+  DIALOG
+  (
+    HEADER "TERM"
+    POS 1. 1. 33. 8.
+    BOX "METHOD:"
+
+    ;port line
+    POS 2. 2. 10. 1.
+    TEXT "Port:"
+    POS 12. 2. 20. 1.
+    PORT: HOTEDIT ""
+    (
+        ;for each keystroke execute <command>:
+        PRIVATE &Input
+        &Input=DIALOG.STRing(PORT)
+    )
+
+    ;speed line
+    POS 2. 3. 10. 1.
+    TEXT "Band rate:"
+    POS 12. 3. 20. 1.
+    SPEED: HOTEDIT ""
+    (
+        ;for each keystroke execute <command>:
+        PRIVATE &Input
+        &Input=DIALOG.STRing(SPEED)
+    )
+
+    ;data line
+    POS 2. 4. 10. 1.
+    TEXT "Data:"
+    POS 12. 4. 20. 1.
+    DATA:    COMBOBOX "5,6,7,8" ""
+
+    ;Parity line
+    POS 2. 5. 10. 1.
+    TEXT "Parity:"
+    POS 12. 5. 20. 1.
+    PARITY:    COMBOBOX "NONE,EVEN,ODD,SPACE,MARK" ""
+
+    ;STOP
+    POS 2. 6. 10. 1.
+    TEXT "Stop:"
+    POS 12. 6. 20. 1.
+    STOP:    COMBOBOX "1STOP,2STOP" ""
+
+    ;Flow control
+    POS 2. 7. 10. 1.
+    TEXT "Flow control:"
+    POS 12. 7. 20. 1.
+    FLOW:    COMBOBOX "NONE,RTSCTS,DTRDSR,XONXOFF" ""
+
+    POS 1. 9. 33. 3.
+    BOX "MODE:"
+
+    POS 2. 10. 31. 1.
+    MODE:    COMBOBOX "ASCII,STRING,RAW,HEX,VT100" ""
+
+    POS 2. 12. 8. 1.
+    SCROLL:    CHECKBOX "SCROLL" ""
+
+    POS 14. 12. 5. 1.
+    TEXT "SIZE:"
+    POS 19. 12. 5. 1.
+    SIZE1: HOTEDIT ""
+    (
+        ;for each keystroke execute <command>:
+        PRIVATE &Input
+        &Input=DIALOG.STRing(SIZE1)
+    )
+    POS 25. 12. 1. 1.
+    TEXT "x"
+    POS 27. 12. 6. 1.
+    SIZE2: HOTEDIT ""
+    (
+        ;for each keystroke execute <command>:
+        PRIVATE &Input
+        &Input=DIALOG.STRing(SIZE2)
+    )
+
+    POS 7. 14. 10.
+    DEFBUTTON "OK" "Continue"
+    POS 18. 14. 10.
+    BUTTON  "Cancel" "GOTO cancel"
+
+  )
+
+  DIALOG.SET DATA "8"
+  DIALOG.SET PORT "&comport"
+  DIALOG.SET SPEED "&speed"
+  DIALOG.SET PARITY "&parity"
+  DIALOG.SET STOP "&stop"
+  DIALOG.SET FLOW "&flow"
+  DIALOG.SET MODE "&mode"
+  DIALOG.SET SIZE1 "&size1"
+  DIALOG.SET SIZE2 "&size2"
+  DIALOG.Set SCROLL
+waitforok:
+  STOP
+;script will continue here when "OK" button is clicked
+  GOTO dialog_ok
+
+
+
+;script continues here when Cancel is clicked"
+cancel:
+  DIALOG.END
+  ENDDO
+  
+dialog_ok:
+;get selections
+  &comport=DIALOG.STRing(PORT)
+  &speed=DIALOG.STRing(SPEED)
+  &data=DIALOG.STRing(DATA)
+  &parity=DIALOG.STRing(PARITY)
+  &stop=DIALOG.STRing(STOP)
+  &flow=DIALOG.STRing(FLOW)
+  &size1=DIALOG.STRing(SIZE1)
+  &size2=DIALOG.STRing(SIZE2)
+  &mode=DIALOG.STRing(MODE)
+  &scroll=DIALOG.BOOLEAN(SCROLL)
+  DIALOG.END
+
+termwin:
+
+  PRINT "opening terminal window for port=&comport, bps=&speed"
+
+;configure terminal window  
+  TERM.RESet
+  TERM.METHOD COM &comport &speed &data &parity &stop &flow 
+  TERM.SIZE &size1 1. &size2 
+  TERM.Mode &mode 
+  IF &scroll
+    TERM.SCROLL ON
+  ELSE
+    TERM.SCROLL OFF
+;set subtitle for TERM.view window (optional)  
+  SUBTITLE " (&comport, "+FORMAT.Decimal(1,&speed)+"bps)"
+  
+;open terminal window with name "Term"
+  WinPOS 0 0 40. 20. 0. 0. Term
+  TERM.view
+  WINPAN 0. -18. Term
+
+;turn off subtitles
+  SUBTITLE 
+  
+ENDDO

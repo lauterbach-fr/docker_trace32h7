@@ -1,0 +1,66 @@
+
+; @Title: Terminal window specific wait implementation.
+; @Description: 
+; waitTerm ["searchString"] [timeout]
+; Wait for appearing static searchString, typically the prompt of a shell,
+; in the last and only line of the special "Term" terminal window.
+; To assure that the prompt is actually send by the target a CR LF with local
+;  Echo On is sent before . 
+; If the string does not appear statically in the last line the script times
+; out with given time or if no time was given at least after 60. seconds.
+; If no Term window exist it simply waits the given time respectivly returns
+; immediately, if no time was given and returns -1.
+; @Author: MAM
+; @Keywords: serial terminal wait
+; @Copyright: (C) 1989-2014 Lauterbach GmbH, licensed for use with TRACE32(R) only
+; $Id: waitterm.cmm 11733 2017-12-05 12:32:21Z mmauser $
+
+LOCAL &searchString &timeout &line &result &termExist &time
+ENTRY &searchString &timeout
+
+IF ("&timeout"=="") // if only one argument is given check if first argument is a time value.
+(
+    Eval &searchString
+    IF (EVAL.TYPE()==0x400)
+    (
+        WAIT &searchString
+        ENDDO
+    )
+)
+
+&result="-1"
+&termExist=TRUE()
+&time=CLOCK.SECONDS()
+
+IF (WINdow.EXIST(Term)&&("&searchString"!=""))
+(
+     WinTOP Term
+    IF ("&timeout"=="")
+    (
+        &timeout=60.
+        &timeout="&timeout"+"s"
+    )
+    TERM.LocalEcho ON   // With help of Local Echo we clear the last line in waitterm.cmm!
+    TERM.Out 0xa  //We send a CR LF. If target is already up the Prompt will be immediately returned else the las line stays empty.
+    TERM.LocalEcho OFF
+    ON TIme &timeout GOTO TIMEOUT
+    WHILE (&result==-1.)
+    (
+        &line=TERM.LINE(d:0x1,-1.)                     // Read Last Line of terminal window
+        &result=STRing.SCAN("&line",&searchString,0) // and check for searchString
+    )
+    &time=CLOCK.SECONDS()-&time
+    PRINT """&searchString"" found after &time seconds in ""&line"""
+    &result=TRUE()
+    GOTO END
+
+TIMEOUT:
+    PRINT """&searchString"" not found in Terminal within &timeout seconds"
+    &result=FALSE()
+)
+ELSE IF ("&timeout"!="")
+(
+    WAIT &timeout
+)
+END:
+ENDDO &result
