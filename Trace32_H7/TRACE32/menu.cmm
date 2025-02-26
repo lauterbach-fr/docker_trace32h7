@@ -15,7 +15,7 @@ MENU.ReProgram
     (
       MENUITEM "DEbug GDB"
       (
-        Os.Command  """&psd"""\bin\windows64\t32marm.exe -c  """&psd"""\config\configGDB.t32 -s  """&psd"""\ard.cmm  
+        Os.Command  """&psd"""\bin\windows64\t32marm.exe -c  """&psd"""\config\configGDB.t32 -s  """&psd"""\menu_gdb.cmm  
         quit 
       )
 
@@ -23,22 +23,12 @@ MENU.ReProgram
       (
           MENUITEM "Sieve"
           (
-            Os.Command   """&psd"""\bin\windows64\t32marm.exe -c  """&psd"""\config\configJTAG.t32 -s   """&psd"""\hardw.cmm 
+            Os.Command   """&psd"""\bin\windows64\t32marm.exe -c  """&psd"""\config\configJTAG.t32 -s   """&psd"""\demo\sieve\stm32h7_sieve_ram.cmm
           quit
           )
-          MENUITEM "T32ThreadDebug"
+          MENUITEM "MultiBlinks"
           (
-            Os.Command   """&psd"""\bin\windows64\t32marm.exe -c  """&psd"""\config\configJTAG.t32 -s   """&psd"""\demo\arm\flash\flashT32ThreadDebug.cmm 
-          quit
-          )
-          MENUITEM "T32ThreadDebugLogger"
-          (
-            Os.Command   """&psd"""\bin\windows64\t32marm.exe -c  """&psd"""\config\configJTAG.t32 -s   """&psd"""\demo\arm\flash\flashT32ThreadDebugLogger.cmm 
-          quit
-          )
-          MENUITEM "T32ThreadDebugPrint"
-          (
-            Os.Command   """&psd"""\bin\windows64\t32marm.exe -c  """&psd"""\config\configJTAG.t32 -s   """&psd"""\demo\arm\flash\flashT32ThreagDebugPrint.cmm 
+            Os.Command   """&psd"""\bin\windows64\t32marm.exe -c  """&psd"""\config\configJTAG.t32 -s   """&psd"""\demo\multiblinks\stm32h7_multiblinks_flash.cmm
           quit
           )
           MENUITEM "Zephyr"
@@ -50,9 +40,14 @@ MENU.ReProgram
 
       POPUP "DEbug simulateur"
       (
+        MENUITEM "Sieve"
+        (
+          Os.Command  """&psd"""\bin\windows64\t32marm.exe -c  """&psd"""\config\configSimu.t32 -s   """&psd"""\demo\sieve\stm32h7_sieve_sim.cmm
+          quit
+        )
         MENUITEM "Bug image"
         (
-          Os.Command  """&psd"""\bin\windows64\t32marm.exe -c  """&psd"""\config\configSimu.t32 -s   """&psd"""\sim.cmm 
+          Os.Command  """&psd"""\bin\windows64\t32marm.exe -c  """&psd"""\config\configSimu.t32 -s   """&psd"""\demo\sim.cmm 
           quit
         )
         
@@ -60,12 +55,19 @@ MENU.ReProgram
     
     )
   )
+  ADD
+  TOOLBAR
+  (
+    TOOLITEM "Go main" ":stepover" 
+    (
+      SYStem.Up
+      Go main
+    )
+  )
 )
-Menu.addtool "RESET CATCH" ":pconfig" "CD.DO &psd\resetcatch.cmm"
-Menu.addtool "GO main" ":stepover" "Register.Set PC _start"
 MENU.addtool "READE ME" ":group" "PEDIT &psd\..\README_WINDOWS.md"
-MENU.addtool "Save" ":Camera" "CD.DO  &psd\demo\kernel\freertos\ramdump.cmm"
-MENU.addtool "Red Bombe" ":colorred" "Var.set bug_a = 1"
+MENU.addtool "Save" ":Camera" "DO &psd\demo\kernel\freertos\ramdump.cmm"
+
 WELCOME.STARTUP
 ENDDO
 )
@@ -82,29 +84,19 @@ MENU.ReProgram
     (
       MENUITEM "DEbug GDB"
       (
-        Os.screen  """&psd"""/bin/pc_linux64/t32marm -c  """&psd"""/config/configGDB.t32 -s  """&psd"""/ard.cmm
+        Os.screen  """&psd"""/bin/pc_linux64/t32marm -c  """&psd"""/config/configGDB.t32 -s  """&psd"""/menu_gdb.cmm
         quit
       )
       POPUP "DEbug JTAG"
       (
           MENUITEM "Sieve"
           (
-            Os.screen  """&psd"""/bin/pc_linux64/t32marm -c  """&psd"""/config/configJTAG.t32 -s   """&psd"""/hardw.cmm
+            Os.screen  """&psd"""/bin/pc_linux64/t32marm -c  """&psd"""/config/configJTAG.t32 -s   """&psd"""/demo/sieve/stm32h7_sieve_ram.cmm
             quit
           )
-          MENUITEM "T32ThreadDebug"
+          MENUITEM "MultiBlinks"
           (
-            Os.screen  """&psd"""/bin/pc_linux64/t32marm -c  """&psd"""/config/configJTAG.t32 -s   """&psd"""/demo/arm/flash/flashT32ThreadDebug.cmm
-            quit
-          )
-          MENUITEM "T32ThreadDebugLogger"
-          (
-            Os.screen  """&psd"""/bin/pc_linux64/t32marm -c  """&psd"""/config/configJTAG.t32 -s   """&psd"""/demo/arm/flash/flashT32ThreadDebugLogger.cmm
-            quit
-          )
-          MENUITEM "T32ThreadDebugPrint"
-          (
-            Os.screen  """&psd"""/bin/pc_linux64/t32marm -c  """&psd"""/config/configJTAG.t32 -s   """&psd"""/demo/arm/flash/flashT32ThreagDebugPrint.cmm
+            Os.screen  """&psd"""/bin/pc_linux64/t32marm -c  """&psd"""/config/configJTAG.t32 -s   """&psd"""/demo/multiblinks/stm32h7_multiblinks_flash.cmm
             quit
           )
           MENUITEM "Zephyr"
@@ -119,19 +111,30 @@ MENU.ReProgram
       (
         MENUITEM "Bug image"
         (
-          Os.Command  """&psd"""/bin/pc_linux64/t32marm -c  """&psd"""/config/configSimu.t32 -s   """&psd"""/sim.cmm 
+          Os.Command  """&psd"""/bin/pc_linux64/t32marm -c  """&psd"""/config/configSimu.t32 -s   """&psd"""/demo/sieve/stm32h7_sieve_sim.cmm 
+          quit
+        )
+        MENUITEM "Bug image"
+        (
+          Os.Command  """&psd"""/bin/pc_linux64/t32marm -c  """&psd"""/config/configSimu.t32 -s   """&psd"""/demo/sim.cmm 
           quit
         )
       )
     
     )
   )
+  ADD
+  TOOLBAR
+  (
+    TOOLITEM "Go main" ":stepover" 
+    (
+      SYStem.Up
+      Go main
+    )
+  )
 )
-Menu.addtool "RESET CATCH" ":pconfig" "CD.DO &psd/resetcatch.cmm"
-Menu.addtool "GO main" ":stepover" "Register.Set PC _start"
-MENU.addtool "READE ME" ":group" "PEDIT &psd/../README_WINDOWS.md"
-MENU.addtool "Save" ":Camera" "CD.DO  &psd/demo/kernel/freertos/ramdump.cmm"
-MENU.addtool "Red Bombe" ":colorred" "Var.set bug_a = 1"
+MENU.addtool "READE ME" ":group" "PEDIT &psd/../README_LINUX.md"
+MENU.addtool "Save" ":Camera" "DO &psd/demo/kernel/freertos/ramdump.cmm"
 WELCOME.STARTUP
 ENDDO
 )

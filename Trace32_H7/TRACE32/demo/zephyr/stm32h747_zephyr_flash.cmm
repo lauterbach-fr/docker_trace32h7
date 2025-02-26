@@ -86,4 +86,6 @@ Var.AddWatch %SpotLight
 WinPOS 120. 25.
 Register.view /SpotLight
 
+DO "~~/menu.cmm"
+
 ENDDO

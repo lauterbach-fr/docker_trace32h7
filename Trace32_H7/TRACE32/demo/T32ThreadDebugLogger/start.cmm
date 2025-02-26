@@ -50,7 +50,7 @@ WinPAGE.RESet
 WinCLEAR
 MENU.RESet
 RESet
-Do "~~/ard.cmm"
+Do "~~/menu_gdb.cmm"
 ; ------------------------------------------------------------------------------
 ; global input parameters
 GLOBAL &GDBPORT
@@ -399,6 +399,8 @@ ELSE
 ; load the symbolic information from the Elf file
 Data.LOAD.Elf "./&elfname" /NoCODE
 
+sYmbol.SourcePATH.Translate "C:\Users\mauri\AppData\Local\Arduino15\packages\arduino\hardware\mbed_portenta\4.0.4\" "~~\demo\source\Arduino15\packages\arduino\hardware\mbed_portenta\4.2.1\"
+sYmbol.SourcePATH.Translate "C:\Users\mauri\AppData\Local\" "~~\demo\source\"
 ; ------------------------------------------------------------------------------
 ; setup the RTOS awareness
 TASK.CONFIG ~~/demo/kernel/rtxarm/v5/rtx.t32
@@ -445,7 +447,7 @@ ELSE
   WinPOS 105.88 12.286 89. 10. 5. 0. W004
   Frame /Args /Locals /Caller
 )
-DO "~~/WinDemo.cmm"
+DO "~~/menu_demo_gdb.cmm"
 ; ------------------------------------------------------------------------------
 ; open TERM if required
 IF "&termComPort"!=""

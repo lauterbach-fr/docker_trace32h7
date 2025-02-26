@@ -22,7 +22,11 @@ RUN apt-get update \
       libuuid1 \
       zlib1g \
       gedit \
+      udev -y \
+      usbutils -y \
   && rm -rf /var/lib/apt/lists/*
+
+
 
 # copy TRACE32
 COPY --from=extractor /opt/Trace32_H7 /opt/Trace32_H7

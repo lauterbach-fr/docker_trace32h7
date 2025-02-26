@@ -21,7 +21,7 @@ DO ~~~~/1709028179_reg_core0.cmm
 DO ~~~~/1709028179_spr_core0_current.cmm
 DO ~~~~/1709028179_reg_core0.cmm
 
-Data.LOAD.Elf "~~/demo/sieve_ram_thumb_ii_v7m.elf"  /NoCODE
+Data.LOAD.Elf "~~/demo/sieve/sieve_ram_thumb_ii_v7m.elf"  /NoCODE
 
 ; Restore flowtrace
 Trace.LOAD ~~~~/1709028179_trace.ad
@@ -44,4 +44,5 @@ Var.DRAW %DEFault sinewave
 Var.set bug_a = 1 
 
 Do "~~/menu.cmm"
+MENU.addtool "Red Bombe" ":colorred" "Var.set bug_a = 1"
 ENDDO
